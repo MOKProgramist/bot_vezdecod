@@ -32,15 +32,20 @@ handler.events.on('command_error', async({context, utils, error}) =>{
 }); //событие срабатывания ошибок в команде
 
 handler.events.on('command_not_found', async({context}) =>{
-	if(!context.isChat) {
-		context.send(`Введенной вами команды не существует!`)
-	}
+	// if(!context.isChat) {
+	// 	context.send(`Введенной вами команды не существует!`)
+	// }
 }); //событие при отсутствие подходящей команды
 
 
 vk.updates.on('message_new', async(context, next) => {
     if(context.senderId < 0) return next();
 	context.text = context.text.replace(/^\[club(\d+)\|(.*)\]/i, '').trim();
+    // чтение контеста с кнопок
+    if(context.messagePayload) {
+        if(context.messagePayload.command) context.text = context.messagePayload.command;
+    };
+
     context.vk = vk;
 	await handler.execute(context);
 });
@@ -49,17 +54,14 @@ const startProject = async() => {
     try {
         await vk.updates.start();
 
-        // await sequelize.authenticate(); // Подключение 
-        // await sequelize.sync({force: true} ); // Синхронизация 
-        
+        // база
         sequelize.sync().then(result=>{
             // console.log(result);
             sequelize.sync({alter: true} ); // Синхронизация 
             
           })
           .catch(err=> console.log(err));
-          let users = await User.findAll({});
-          console.log(users)
+
         handler.loadCommands()
         .then(() => console.log('commands loaded')) // загружает команды
         .catch(err => console.error(err)) // обязательно обрабатывайте ошибку

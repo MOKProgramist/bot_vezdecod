@@ -22,8 +22,8 @@ module.exports = new Command({
         // console.log(user_vk);
         let user_new = await User.create({id_vk: context.senderId, lastName: user_vk.last_name, firstName: user_vk.first_name});
         // console.log(user_new);
-        context.send(`${user_new.firstName}, ты успешно зарегистрирован!`)
-        return context.send(`Привет вездекодерам! 1`);
+        // context.send(`${user_new.firstName}, ты успешно зарегистрирован!`)
+        return context.send(`Привет вездекодерам!`);
     };
 
     return context.send(`Привет вездекодерам!`);
