@@ -1,5 +1,11 @@
 require('dotenv').config();
+// Вопросы
+const { SessionManager }  = require('@vk-io/session');
+const { SceneManager, StepScene } = require('@vk-io/scenes');
+const sessionManager = new SessionManager();
+const sceneManager = new SceneManager();
 const QuestionManager = require('vk-io-question');
+
 const { Handler } = require('commander-core')
 const { VK, getRandomId } = require('vk-io')
 const path = require('path')
