@@ -39,9 +39,9 @@ handler.events.on('command_error', async({context, utils, error}) =>{
 }); //событие срабатывания ошибок в команде
 
 handler.events.on('command_not_found', async({context}) =>{
-	// if(!context.isChat) {
-	// 	context.send(`Введенной вами команды не существует!`)
-	// }
+	if(!context.isChat) {
+		context.send(`Вот список команд: `, { keyboard: QuestionKey.start()})
+	}
 }); //событие при отсутствие подходящей команды
 
 vk.updates.on('message_new', sessionManager.middleware);
