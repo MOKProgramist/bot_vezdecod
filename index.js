@@ -11,6 +11,7 @@ const { VK, getRandomId } = require('vk-io')
 const path = require('path')
 
 const {User} = require('./Model/Model');
+const QuestionKey = require('./keyboard_bot');
 const Utils = require('./utils.js') //наши утилиты
 const sequelize = require('./bd'); // база данных
 const TOKEN = process.env.TOKEN //токен от группы
@@ -43,6 +44,10 @@ handler.events.on('command_not_found', async({context}) =>{
 	// }
 }); //событие при отсутствие подходящей команды
 
+vk.updates.on('message_new', sessionManager.middleware);
+
+vk.updates.on('message_new', sceneManager.middleware);
+vk.updates.on('message_new', sceneManager.middlewareIntercept); // Default scene entry handler
 
 vk.updates.on('message_new', async(context, next) => {
     if(context.senderId < 0) return next();
@@ -50,6 +55,12 @@ vk.updates.on('message_new', async(context, next) => {
     // чтение контеста с кнопок
     if(context.messagePayload) {
         if(context.messagePayload.command) context.text = context.messagePayload.command;
+        // чтобы закончить сессию
+        if(context.messagePayload.command_que) {
+            if(context.messagePayload.command_que == 'exit que') {
+                context.text = 'привет'
+            }
+        }
     };
 
     context.vk = vk;
@@ -78,6 +89,147 @@ const startProject = async() => {
 };
 
 startProject(); 
+
+
+// чисто тест вопросов
+// сцена вопросов
+sceneManager.addScenes([
+	new StepScene('questions', [
+        // 1
+		(context) => {
+			if (context.scene.step.firstTime || !context.text) {
+				return context.send('Сейчас я задам тебе 8 вопросов, для ответа используй кнопки!\n\n1. Какой сейчас год?', { keyboard: QuestionKey.one()});
+			}
+            context.scene.state.count = 0;
+			context.scene.state.que = context.text;
+			return context.scene.step.next();
+		},
+        // 2
+		(context) => {
+            if(context.messagePayload.command_que == `exit que`) {
+                context.send(`Жаль что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
+                return context.scene.leave();
+            }
+			if (context.scene.step.firstTime || !context.text) {
+                const res = context.scene.state.que == QuestionKey.one_answer ? "Правильно!\n" : "Неправильно!\n"
+                if(context.scene.state.que == QuestionKey.one_answer) context.scene.state.count++;
+
+				return context.send(`${res}\n 2. Какого цвета небо?`, { keyboard: QuestionKey.two()});
+			}
+
+			context.scene.state.que = context.text;
+
+			return context.scene.step.next();
+		},
+        // 3
+        (context) => {
+            if(context.messagePayload.command_que == `exit que`) {
+                context.send(`Жаль что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
+                return context.scene.leave();
+            }
+			if (context.scene.step.firstTime || !context.text) {
+                const res = context.scene.state.que == QuestionKey.two_answer ? "Правильно!\n" : "Неправильно!\n"
+                if(context.scene.state.que == QuestionKey.two_answer) context.scene.state.count++;
+				return context.send(`${res}\n 3. Кто съел Колобка?`, { keyboard: QuestionKey.three()});
+			}
+
+			context.scene.state.que = context.text;
+
+			return context.scene.step.next();
+		}, 
+        // 4
+        (context) => {
+            if(context.messagePayload.command_que == `exit que`) {
+                context.send(`Жаль что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
+                return context.scene.leave();
+            }
+			if (context.scene.step.firstTime || !context.text) {
+                const res = context.scene.state.que == QuestionKey.three_answer ? "Правильно!\n" : "Неправильно!\n";
+                if(context.scene.state.que == QuestionKey.three_answer) context.scene.state.count++;
+				return context.send(`${res}\n 4. Квадратный корень из 144?`, { keyboard: QuestionKey.four()});
+			}
+
+			context.scene.state.que = context.text;
+
+			return context.scene.step.next();
+		}, 
+        // 5
+        (context) => {
+            if(context.messagePayload.command_que == `exit que`) {
+                context.send(`Жаль что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
+                return context.scene.leave();
+            }
+			if (context.scene.step.firstTime || !context.text) {
+                const res = context.scene.state.que == QuestionKey.four_answer ? "Правильно!\n" : "Неправильно!\n"
+                if(context.scene.state.que == QuestionKey.four_answer) context.scene.state.count++;
+				return context.send(`${res}\n 5. Какого мальчика воспитывали животные?`, { keyboard: QuestionKey.five()});
+			}
+
+			context.scene.state.que = context.text;
+
+			return context.scene.step.next();
+		}, 
+        // 6
+        (context) => {
+            if(context.messagePayload.command_que == `exit que`) {
+                context.send(`Жаль что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
+                return context.scene.leave();
+            }
+			if (context.scene.step.firstTime || !context.text) {
+                const res = context.scene.state.que == QuestionKey.five_answer ? "Правильно!\n" : "Неправильно!\n"
+                if(context.scene.state.que == QuestionKey.five_answer) context.scene.state.count++;
+				return context.send(`${res}\n 6. Для тебя будет это легко, чему равно: (2 + 2 * 2) ?`, { keyboard: QuestionKey.six()});
+			}
+
+			context.scene.state.que = context.text;
+
+			return context.scene.step.next();
+		}, 
+        // 7
+        (context) => {
+            if(context.messagePayload.command_que == `exit que`) {
+                context.send(`Жаль что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
+                return context.scene.leave();
+            }
+			if (context.scene.step.firstTime || !context.text) {
+                const res = context.scene.state.que == QuestionKey.six_answer ? "Правильно, а ты крутой математик!\n" : "Неправильно, ну ничего!\n"
+                if(context.scene.state.que == QuestionKey.six_answer) context.scene.state.count++;
+				return context.send(`${res}\n 7. Какое время года сейчас?)`, { keyboard: QuestionKey.seven()});
+			}
+
+			context.scene.state.que = context.text;
+
+			return context.scene.step.next();
+		}, 
+        // 8
+        (context) => {
+            if(context.messagePayload.command_que == `exit que`) {
+                context.send(`Жаль что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
+                return context.scene.leave();
+            }
+			if (context.scene.step.firstTime || !context.text) {
+                const res = context.scene.state.que == QuestionKey.seven_answer ? "Правильно!\n" : "Неправильно, хотя возможно у кого-то и другое! :)\n"
+                if(context.scene.state.que == QuestionKey.seven_answer) context.scene.state.count++;
+				return context.send(`${res}\n И последний вопрос!. 8. Сколько лап у паука?`, { keyboard: QuestionKey.eight()});
+			}
+
+			context.scene.state.que = context.text;
+
+			return context.scene.step.next();
+		}, 
+        // end
+		async (context) => {
+            if (context.scene.step.firstTime || !context.text) {
+                const res = context.scene.state.que == QuestionKey.eight_answer ? "Правильно!\n" : "Неправильно! :)\n"
+                if(context.scene.state.que == QuestionKey.eight_answer) context.scene.state.count++;
+				return context.send(`${res}\n Ты ответил правильно на ${context.scene.state.count} из 8 вопросов.`, { keyboard: QuestionKey.start()});
+			}
+
+			return context.scene.step.next(); // Automatic exit, since this is the last scene
+		}
+	])
+]);
+
 
 // Синхронизация модели с таблицей: 
 // User.sync() — создает таблицу при отсутствии (существующая таблица остается неизменной)
