@@ -1,0 +1,27 @@
+{
+  "name": "bot_vezdecod",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "pm2 start index.js",
+    "dev": "pm2 start index.js --watch && pm2 log"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "commander-core": "^3.0.2",
+    "dotenv": "^16.0.0",
+    "mysql2": "^2.3.3",
+    "path": "^0.12.7",
+    "sequelize": "^6.18.0",
+    "vk-io": "^4.5.2",
+    "vk-io-question": "^3.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15",
+    "pm2": "^5.2.0"
+  }
+}
