@@ -45,10 +45,14 @@ module.exports = [new Command({
             let boll = memeScores.like == true;
             if(boll) return context.send('Больше одного лайка на мем поставить нельзя :_)');
             // изменяем диз на лайк
+            meme.like_count += 1;
+            meme.dislike_count -= 1;
+            await meme.save();
             await memeScores.update({like: true});
             return context.send('Ты изменил свою оценку на лайк!');
         }
-
+        meme.like_count += 1;
+        await meme.save();
         const like = await MemeScores.create({like: true, userId: user.id, memeId: meme.id});
         //console.log(like)
         return context.send(`Ты поставил лайк на мем #${context.body[1]}`)
@@ -91,10 +95,14 @@ new Command({
             let boll = memeScores.like == false;
             if(boll) return context.send('Больше одного дизлайка на мем поставить нельзя :_)');
             // изменяем диз на лайк
+            meme.dislike_count += 1;
+            meme.like_count -= 1;
+            await meme.save();
             await memeScores.update({like: false});
             return context.send('Ты изменил свою оценку на дизлайк!');
         }
-
+        meme.dislike_count += 1;
+        await meme.save();
         const like = await MemeScores.create({like: false, userId: user.id, memeId: meme.id});
         // console.log(like)
         return context.send(`Ты поставил дизлайк на мем #${context.body[1]}`)

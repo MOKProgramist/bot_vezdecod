@@ -17,6 +17,9 @@ const Memes = sequelize.define('memes', {
     name: {type: DataTypes.STRING(100), allowNull: true },
     link: {type: DataTypes.STRING(100), allowNull: true },
     url: {type: DataTypes.STRING(500), allowNull: false },  
+    
+    like_count: {type: DataTypes.INTEGER, defaultValue: 0},
+    dislike_count: {type: DataTypes.INTEGER, defaultValue: 0},
 });
 
 // оценки мемов пользователями
