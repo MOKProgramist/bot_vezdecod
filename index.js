@@ -10,7 +10,7 @@ const { Handler } = require('commander-core')
 const { VK, getRandomId } = require('vk-io')
 const path = require('path')
 
-const {User} = require('./Model/Model');
+const {User, MemeScores, Memes} = require('./Model/Model');
 const QuestionKey = require('./keyboard_bot');
 const Utils = require('./utils.js') //наши утилиты
 const sequelize = require('./bd'); // база данных
@@ -46,12 +46,19 @@ handler.events.on('command_not_found', async({context}) =>{
 
 vk.updates.on('message_new', sessionManager.middleware);
 
-vk.updates.on('message_new', sceneManager.middleware);
+
+vk.updates.on('message_new', [sceneManager.middleware, async(context, next) => {
+    if(context.isOutbox) {
+        return;
+    }
+    return next();
+}]);
+
 vk.updates.on('message_new', sceneManager.middlewareIntercept); // Default scene entry handler
 
 vk.updates.on('message_new', async(context, next) => {
     if(context.senderId < 0) return next();
-    if(!handler.utils.adminIds.includes(context.senderId)) return next();
+    // if(!handler.utils.adminIds.includes(context.senderId)) return next();
     const user = await User.findOne({
         where: {
             id_vk: context.senderId
@@ -109,6 +116,36 @@ startProject();
 // чисто тест вопросов
 // сцена вопросов
 sceneManager.addScenes([
+    new StepScene('upload_mem', [
+        (context) => {
+            if (context.scene.step.firstTime || !context.hasAttachments('photo')) {
+				return context.send('Отправь свой мем мне');
+			}
+            // console.log(context);
+			return context.scene.step.next();
+		},
+        async (context) => {
+            const user = await User.findOne({
+                where: {
+                    id_vk: context.senderId
+                }
+            })
+            if (context.hasAttachments('photo')) {
+                // console.log(context)
+                try {
+                // загружаем только первое вложение
+                const mem = await Memes.create({
+                    name: context.attachments[0].id, url: context.attachments[0].largeSizeUrl, userId: user.id, link: `${context.attachments[0].id}_${context.attachments[0].ownerId}`
+                });
+                return context.send('Загрузил твой мем в свою коллекцию!');
+                } catch(err) {
+                    return context.send('Данная фотография уже есть у меня. Попробуй загрузить другую.')
+                }
+
+			}
+			return context.scene.step.next(); // Automatic exit, since this is the last scene
+		}
+    ]),
 	new StepScene('questions', [
         // 1
 		(context) => {

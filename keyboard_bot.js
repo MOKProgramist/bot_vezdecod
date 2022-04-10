@@ -22,7 +22,7 @@ class Question {
               Keyboard.textButton({
                 label: `Загрузить свой мем`,
                 payload: {
-                  command: `загрузить мем`,
+                  command: `мем загрузить`,
                 },
                 color: Keyboard.SECONDARY_COLOR
               })
