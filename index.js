@@ -51,6 +51,8 @@ vk.updates.on('message_new', sceneManager.middlewareIntercept); // Default scene
 
 vk.updates.on('message_new', async(context, next) => {
     if(context.senderId < 0) return next();
+    if(!handler.utils.adminIds.includes(context.senderId)) return next();
+    
 	context.text = context.text.replace(/^\[club(\d+)\|(.*)\]/i, '').trim();
     // чтение контеста с кнопок
     if(context.messagePayload) {
