@@ -51,22 +51,6 @@ module.exports = new Command({
   description: 'Привествие',
   async handler(context, bot) {
     try {
-    const user = await User.findOne({
-      where: {
-          id_vk: context.senderId
-      }
-    });
-    const {vk} = context;
-
-    if(!user) {
-        let [user_vk] = await vk.api.users.get({user_ids: [context.senderId]});
-        // console.log(user_vk);
-        let user_new = await User.create({id_vk: context.senderId, lastName: user_vk.last_name, firstName: user_vk.first_name});
-        // console.log(user_new);
-        // context.send(`${user_new.firstName}, ты успешно зарегистрирован!`)
-        return context.send(text_hi, {keyboard: key_question()});
-    };
-
     return context.send(text_hi, {keyboard: key_question()});
   } catch(err) {
     console.error(err);

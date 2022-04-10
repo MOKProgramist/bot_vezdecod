@@ -52,7 +52,20 @@ vk.updates.on('message_new', sceneManager.middlewareIntercept); // Default scene
 vk.updates.on('message_new', async(context, next) => {
     if(context.senderId < 0) return next();
     if(!handler.utils.adminIds.includes(context.senderId)) return next();
-    
+    const user = await User.findOne({
+        where: {
+            id_vk: context.senderId
+        }
+      });
+  
+      // регистрация
+      if(!user) {
+          let [user_vk] = await vk.api.users.get({user_ids: [context.senderId]});
+          // console.log(user_vk);
+          let user_new = await User.create({id_vk: context.senderId, lastName: user_vk.last_name, firstName: user_vk.first_name});
+          // console.log(user_new);
+      };
+
 	context.text = context.text.replace(/^\[club(\d+)\|(.*)\]/i, '').trim();
     // чтение контеста с кнопок
     if(context.messagePayload) {
