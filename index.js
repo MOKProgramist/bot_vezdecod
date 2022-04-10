@@ -109,7 +109,7 @@ sceneManager.addScenes([
         // 2
 		(context) => {
             if(context.messagePayload.command_que == `exit que`) {
-                context.send(`Жаль что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
+                context.send(`Жаль, что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
                 return context.scene.leave();
             }
 			if (context.scene.step.firstTime || !context.text) {
@@ -126,7 +126,7 @@ sceneManager.addScenes([
         // 3
         (context) => {
             if(context.messagePayload.command_que == `exit que`) {
-                context.send(`Жаль что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
+                context.send(`Жаль, что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
                 return context.scene.leave();
             }
 			if (context.scene.step.firstTime || !context.text) {
@@ -142,7 +142,7 @@ sceneManager.addScenes([
         // 4
         (context) => {
             if(context.messagePayload.command_que == `exit que`) {
-                context.send(`Жаль что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
+                context.send(`Жаль, что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
                 return context.scene.leave();
             }
 			if (context.scene.step.firstTime || !context.text) {
@@ -158,7 +158,7 @@ sceneManager.addScenes([
         // 5
         (context) => {
             if(context.messagePayload.command_que == `exit que`) {
-                context.send(`Жаль что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
+                context.send(`Жаль, что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
                 return context.scene.leave();
             }
 			if (context.scene.step.firstTime || !context.text) {
@@ -174,7 +174,7 @@ sceneManager.addScenes([
         // 6
         (context) => {
             if(context.messagePayload.command_que == `exit que`) {
-                context.send(`Жаль что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
+                context.send(`Жаль, что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
                 return context.scene.leave();
             }
 			if (context.scene.step.firstTime || !context.text) {
@@ -190,7 +190,7 @@ sceneManager.addScenes([
         // 7
         (context) => {
             if(context.messagePayload.command_que == `exit que`) {
-                context.send(`Жаль что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
+                context.send(`Жаль, что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
                 return context.scene.leave();
             }
 			if (context.scene.step.firstTime || !context.text) {
@@ -206,7 +206,7 @@ sceneManager.addScenes([
         // 8
         (context) => {
             if(context.messagePayload.command_que == `exit que`) {
-                context.send(`Жаль что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
+                context.send(`Жаль, что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
                 return context.scene.leave();
             }
 			if (context.scene.step.firstTime || !context.text) {

@@ -79,7 +79,7 @@ class Question {
                     }
                 })
             ],
-        ])
+        ]).inline()
         
         return key; 
     }

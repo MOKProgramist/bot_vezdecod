@@ -15,6 +15,7 @@ const User = sequelize.define('users', {
 const Memes = sequelize.define('memes', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     name: {type: DataTypes.STRING(100), allowNull: true },
+    link: {type: DataTypes.STRING(100), allowNull: true },
     url: {type: DataTypes.STRING(500), allowNull: false },  
 });
 
@@ -28,8 +29,8 @@ const MemeScores = sequelize.define('memes_scores', {
 User.hasMany(Memes, {as: 'mem_user'});
 Memes.belongsTo(User);
 // каждая запись о оценки приналдежит мему и пользователю
-MemeScores.hasMany(Memes, {as: 'list_scores'});
-Memes.belongsTo(MemeScores);
+Memes.hasMany(MemeScores, {as: 'list_scores'});
+MemeScores.belongsTo(Memes);
 
 User.hasMany(MemeScores, {as: 'list_like'});
 MemeScores.belongsTo(User);
