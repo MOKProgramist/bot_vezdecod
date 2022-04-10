@@ -39,9 +39,9 @@ handler.events.on('command_error', async({context, utils, error}) =>{
 }); //событие срабатывания ошибок в команде
 
 handler.events.on('command_not_found', async({context}) =>{
-	// if(!context.isChat) {
-	// 	context.send(`Введенной вами команды не существует!`)
-	// }
+	if(!context.isChat) {
+		context.send(`Вот список команд: `, { keyboard: QuestionKey.start()})
+	}
 }); //событие при отсутствие подходящей команды
 
 vk.updates.on('message_new', sessionManager.middleware);
@@ -51,6 +51,21 @@ vk.updates.on('message_new', sceneManager.middlewareIntercept); // Default scene
 
 vk.updates.on('message_new', async(context, next) => {
     if(context.senderId < 0) return next();
+    if(!handler.utils.adminIds.includes(context.senderId)) return next();
+    const user = await User.findOne({
+        where: {
+            id_vk: context.senderId
+        }
+      });
+  
+      // регистрация
+      if(!user) {
+          let [user_vk] = await vk.api.users.get({user_ids: [context.senderId]});
+          // console.log(user_vk);
+          let user_new = await User.create({id_vk: context.senderId, lastName: user_vk.last_name, firstName: user_vk.first_name});
+          // console.log(user_new);
+      };
+
 	context.text = context.text.replace(/^\[club(\d+)\|(.*)\]/i, '').trim();
     // чтение контеста с кнопок
     if(context.messagePayload) {
@@ -107,7 +122,7 @@ sceneManager.addScenes([
         // 2
 		(context) => {
             if(context.messagePayload.command_que == `exit que`) {
-                context.send(`Жаль что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
+                context.send(`Жаль, что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
                 return context.scene.leave();
             }
 			if (context.scene.step.firstTime || !context.text) {
@@ -124,7 +139,7 @@ sceneManager.addScenes([
         // 3
         (context) => {
             if(context.messagePayload.command_que == `exit que`) {
-                context.send(`Жаль что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
+                context.send(`Жаль, что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
                 return context.scene.leave();
             }
 			if (context.scene.step.firstTime || !context.text) {
@@ -140,7 +155,7 @@ sceneManager.addScenes([
         // 4
         (context) => {
             if(context.messagePayload.command_que == `exit que`) {
-                context.send(`Жаль что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
+                context.send(`Жаль, что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
                 return context.scene.leave();
             }
 			if (context.scene.step.firstTime || !context.text) {
@@ -156,7 +171,7 @@ sceneManager.addScenes([
         // 5
         (context) => {
             if(context.messagePayload.command_que == `exit que`) {
-                context.send(`Жаль что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
+                context.send(`Жаль, что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
                 return context.scene.leave();
             }
 			if (context.scene.step.firstTime || !context.text) {
@@ -172,7 +187,7 @@ sceneManager.addScenes([
         // 6
         (context) => {
             if(context.messagePayload.command_que == `exit que`) {
-                context.send(`Жаль что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
+                context.send(`Жаль, что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
                 return context.scene.leave();
             }
 			if (context.scene.step.firstTime || !context.text) {
@@ -188,7 +203,7 @@ sceneManager.addScenes([
         // 7
         (context) => {
             if(context.messagePayload.command_que == `exit que`) {
-                context.send(`Жаль что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
+                context.send(`Жаль, что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
                 return context.scene.leave();
             }
 			if (context.scene.step.firstTime || !context.text) {
@@ -204,7 +219,7 @@ sceneManager.addScenes([
         // 8
         (context) => {
             if(context.messagePayload.command_que == `exit que`) {
-                context.send(`Жаль что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
+                context.send(`Жаль, что не прошел тест до конца, у тебя было ${context.scene.state.count} правильных ответов!`, { keyboard: QuestionKey.start()});
                 return context.scene.leave();
             }
 			if (context.scene.step.firstTime || !context.text) {

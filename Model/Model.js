@@ -11,25 +11,32 @@ const User = sequelize.define('users', {
     is_allowed: {type: DataTypes.BOOLEAN, defaultValue: false} // может ли писать пользователю или нет в вк
 });
 
-// загруженные мемы пользователей
+// загруженные мемы
 const Memes = sequelize.define('memes', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     name: {type: DataTypes.STRING(100), allowNull: true },
+    link: {type: DataTypes.STRING(100), allowNull: true },
     url: {type: DataTypes.STRING(500), allowNull: false },  
 });
 
 // оценки мемов пользователями
 const MemeScores = sequelize.define('memes_scores', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    name: {type: DataTypes.STRING(100), allowNull: true },
-    url: {type: DataTypes.STRING(500), allowNull: false },  
+    like: {type: DataTypes.BOOLEAN, allowNull: false},
 });
 // связи
 // каждая картинка принадлежит пользователю
-User.hasMany(Memes, {as: 'mems'});
+User.hasMany(Memes, {as: 'mem_user'});
 Memes.belongsTo(User);
+// каждая запись о оценки приналдежит мему и пользователю
+Memes.hasMany(MemeScores, {as: 'list_scores'});
+MemeScores.belongsTo(Memes);
+
+User.hasMany(MemeScores, {as: 'list_like'});
+MemeScores.belongsTo(User);
 
 module.exports = {
     User, 
-    Memes
+    Memes,
+    MemeScores
 }
