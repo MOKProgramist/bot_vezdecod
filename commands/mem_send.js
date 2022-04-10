@@ -44,13 +44,13 @@ const keyMem = (memId) => {
     const key = Keyboard.keyboard([
         [
             Keyboard.textButton({
-                label: `👍Лайк`,
+                label: `👍`,
                 payload: {
                     command: `мем лайк ${memId}`,
                 },
             }),
             Keyboard.textButton({
-                label: `👎 Дизлайк`,
+                label: `👎`,
                 payload: {
                     command: `мем диз ${memId}`,
                 },
